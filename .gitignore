@@ -5,6 +5,13 @@ package-lock.json
 # deployment configs
 .clasp.json
 .firebaserc
+FDCConfig.ts
+
+# Deployment
+/public/bundle.js
+
+# Firebase
+/.firebase
 
 # misc
 .DS_Store
