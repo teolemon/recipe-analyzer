@@ -1,3 +1,4 @@
+import { FDCFoodDetails } from './FDCFoodDetails';
 import { FDCConfig } from './FDCConfig';
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -7,6 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
   fetch(url).then((response) => {
     return response.json();
   }).then((json) => {
-    return ingredientName.innerHTML = json.description;
+    const foodDetails = <FDCFoodDetails>json;
+    ingredientName.innerHTML = foodDetails.description;
   });
 });
