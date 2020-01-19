@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Ingredient Viewer</title>
 
+    <link rel="stylesheet" href="main.css">
+
     <script defer src="/__/firebase/7.7.0/firebase-app.js"></script>
     <script defer src="/__/firebase/7.7.0/firebase-auth.js"></script>
     <script defer src="/__/firebase/init.js"></script>
@@ -12,7 +14,21 @@
   <body>
     <div>
       <h2 id="ingredient">Ingredient</h2>
+      <table class="nutrients-table">
+        <thead>
+          <tr>
+            <th>Calories</th>
+            <th>Protein</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td id="calories"> - </td>
+            <td id="protein"> - </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-    <script src="./bundle.js"></script>
+    <script src="bundle.js"></script>
   </body>
 </html>

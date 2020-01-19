@@ -1,0 +1,9 @@
+.nutrients-table {
+  border-collapse: collapse;
+}
+.nutrients-table, .nutrients-table th, .nutrients-table td {
+  border: 1px solid black;
+}
+.nutrients-table th, .nutrients-table td {
+  padding: 8px;
+}
