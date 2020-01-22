@@ -5,6 +5,7 @@ package-lock.json
 # deployment configs
 .clasp.json
 .firebaserc
+serviceAccountKey.json
 FDCConfig.ts
 
 # Deployment

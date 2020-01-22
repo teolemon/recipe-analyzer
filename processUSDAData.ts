@@ -1,6 +1,7 @@
 import { createReadStream } from 'fs';
 import { join } from 'path';
 import { Parser } from 'csv-parse';
+import * as admin from 'firebase-admin';
 
 import { FDCConfig } from './FDCConfig';
 import { FDCFoodDetails } from './FDCFoodDetails';
@@ -16,10 +17,12 @@ function readCsvFile(filename: string, callback: (obj: {[index: string]: string}
   });
   let header: string[] = null;
   let numSkippedRows = 0;
+  let numTotalRows = 0;
   return new Promise<void>(resolve => {
     createReadStream(dataFile(filename), {encoding: 'latin1'}).pipe(parser).on('readable', function() {
       let data: string[];
       while (data = this.read()) {
+        numTotalRows++;
         if (header == null) {
           header = data;
         } else if (header.length == data.length) {
@@ -33,13 +36,20 @@ function readCsvFile(filename: string, callback: (obj: {[index: string]: string}
         }
       }
     }).on('end', () => {
-      console.log('Skipped ' + numSkippedRows + ' rows');
+      console.log('Skipped ' + numSkippedRows + ' rows out of ' + numTotalRows);
       resolve();
     });
   });
 }
 
 async function main() {
+  let serviceAccount = require('./serviceAccountKey.json');
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount)
+  });
+
+  let db = admin.firestore();
+
   let foodDetailsByFdcId: {[index: string]: FDCFoodDetails} = {};
   await readCsvFile('sr_legacy_food', food => {
     foodDetailsByFdcId[food.fdc_id] = {
@@ -74,7 +84,11 @@ async function main() {
       });
     }
   });
-  console.log(foodDetailsByFdcId['175257']);
+
+  Object.keys(foodDetailsByFdcId).forEach(fdcId => {
+    let docRef = db.collection('usdaFoods').doc(fdcId);
+    docRef.set(foodDetailsByFdcId[fdcId]);
+  });
 }
 
 main();
