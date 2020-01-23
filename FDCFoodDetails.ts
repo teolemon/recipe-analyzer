@@ -24,6 +24,7 @@ export interface FDCFoodDetails {
     gramWeight: number,
     amount: number,
   }[];
+  gtinUpc?: string,
   servingSize?: number,
   servingSizeUnit?: string,
   householdServingFullText?: string,

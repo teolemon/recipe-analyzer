@@ -58,6 +58,17 @@ async function main() {
       foodNutrients: [],
     };
   });
+  await readCsvFile('branded_food', food => {
+    foodDetailsByFdcId[food.fdc_id] = {
+      description: null,
+      dataType: 'Branded',
+      foodNutrients: [],
+      gtinUpc: food.gtin_upc,
+      servingSize: Number(food.serving_size),
+      servingSizeUnit: food.serving_size_unit,
+      householdServingFullText: food.household_serving_fulltext,
+    };
+  });
   await readCsvFile('food', food => {
     let foodDetails = foodDetailsByFdcId[food.fdc_id];
     if (foodDetails != null) {
