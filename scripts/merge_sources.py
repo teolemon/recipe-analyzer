@@ -50,7 +50,7 @@ def _convert_nutrient(nutrient):
         'id': int(nutrient.id),
         'name': nutrient.name,
         'unitName': _NEW_UNIT_NAMES.get(nutrient.unit_name, _UNKNOWN_UNIT),
-        'number': nutrient.nutrient_nbr,
+        'nutrient_nbr': nutrient.nutrient_nbr,
         'rank': int(nutrient.rank) if nutrient.rank else None
     })
 
@@ -88,6 +88,7 @@ def _merge(branded_food, food, food_nutrients, nutrients):
         "marketCountry": branded_food.market_country,
         'modifiedDate': _convert_date_format(branded_food.modified_date),
         'availableDate': _convert_date_format(branded_food.available_date),
+        'discontinuedDate': _convert_date_format(branded_food.discontinued_date),
         'servingSize': float(branded_food.serving_size) if branded_food.serving_size else None,
         'servingSizeUnit': branded_food.serving_size_unit or None,
         'householdServingFullText': branded_food.household_serving_fulltext or None,
@@ -96,6 +97,12 @@ def _merge(branded_food, food, food_nutrients, nutrients):
         'dataType': 'Branded',
         'publicationDate': _convert_date_format(food.publication_date),
         'foodPortions': [],
+        # additions
+        'brand_name': branded_food.brand_name,
+        'subbrand_name': branded_food.subbrand_name,
+        'not_a_significant_source_of': branded_food.not_a_significant_source_of
+
+
     })
 
 
@@ -119,7 +126,9 @@ def merge_sources(raw_data):
     # Convert nutrients to a dict for merging.
     # Skip nutrients with rank '' because it's not clear how to handle them.
     nutrients = {
-        nutrient.id: _convert_nutrient(nutrient)
+	# April 2021: food_nutrients.csv nutrient_id field contains in fact the nutrient_nbr field 
+
+        nutrient.nutrient_nbr: _convert_nutrient(nutrient)
         for nutrient in raw_data.nutrients}
 
     food_nutrients = defaultdict(list)
